@@ -10,8 +10,8 @@ print("List Images:")
 
 for image in conn.compute.images():
 	keys = image.keys()
-	for x, index in enumerate(keys): 
-		if index == "name":
+	for x, index in enumerate(keys):
+		#if index == "name": 
 			print "%s | %s\n" % (keys[x], image[index])
 
 print("List Servers:")
@@ -21,4 +21,9 @@ for server in conn.compute.servers():
 		print "%s | %s\n" % (keys[x], server[index])
 
 
-
+print("List Flavors:")
+for flavor in conn.compute.flavors():
+	keys = flavor.keys()
+	for x, index in enumerate(keys):
+		print "%s | %s\n" % (keys[x], flavor[index])
+		
