@@ -54,23 +54,57 @@ def create_router(ROUTER_NAME):
 		
 	print(router)
 
-#def add_router_interfaces()
-	
+def add_ports(ROUTER_NAME, NETWORK_NAME):
+	print("Add Ports:")
 
-"""	
+	router = conn.network.find_router(ROUTER_NAME)
+	network = conn.network.find_network(NETWORK_NAME)
+
+	print(network.subnets)	
+	network_subnets1 = str(network.subnets).strip('[]')
+	network_subnets = network_subnets1[2:-1]
+	print network_subnets
+	host_id = "localhost.localdomain"
+		
+	port = conn.network.create_port(device_owner="network:router_interface",
+	fixed_ips=[{"subnet_id": network_subnets}], 
+	#binding_host_id=host_id,
+	network_id=network.id,
+	device_id=router.id)
+
+	print(port)	
+
+def add_router_interfaces(ROUTER_NAME, NETWORK_NAME):
+	print("Add Interface to Router:")
+
+	router = conn.network.find_router(ROUTER_NAME)
+	network = conn.network.find_network(NETWORK_NAME)
+	network_subnets1 = str(network.subnets).strip('[]')
+	network_subnets = network_subnets1[2:-1]
+
+	print(router)
+	print(NETWORK_NAME)
+		
+	interface = conn.network.router_add_interface(router=ROUTER_NAME,
+	subnet_id=network.subnets)
+
+	print (interface)	
+
+r_name = "Router1"
+#create_router(r_name)
+
 im_name = "cirros"
 vm_name = "VM1"
 fl_name = "m1.tiny"
 
-create_network(net_name=vm_name, sub_ip="192.168.1.0/24", gate_ip="192.168.1.1")
-create_server(IMAGE_NAME=im_name, FLAVOR_NAME=fl_name, NETWORK_NAME=vm_name, SERVER_NAME=vm_name)  
-
+#create_network(net_name=vm_name, sub_ip="192.168.1.0/24", gate_ip="192.168.1.1")
+#create_server(IMAGE_NAME=im_name, FLAVOR_NAME=fl_name, NETWORK_NAME=vm_name, SERVER_NAME=vm_name)  
+#add_ports(r_name, vm_name)
+add_router_interfaces(r_name, vm_name)
 
 vm_name = "VM2"
 create_network(net_name=vm_name, sub_ip="10.1.1.0/24", gate_ip="10.1.1.1")
 create_server(IMAGE_NAME=im_name, FLAVOR_NAME=fl_name, NETWORK_NAME=vm_name, SERVER_NAME=vm_name)  
-"""
-
-r_name = "HFR2"
-create_router(r_name)
+add_ports(r_name, vm_name)
+#add_router_interfaces(r_name, vm_name)
 
